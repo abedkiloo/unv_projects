@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -8,6 +7,20 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+import VueRouter from 'vue-router'
+import { Form, HasError, AlertError } from 'vform'
+
+window.Form=Form;
+Vue.use(VueRouter)
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
+let routes = [
+    {path: '/dashboard', component: require('./components/Dashboard.vue').default},
+    {path: '/users', component: require('./components/Users.vue').default},
+    {path: '/profile', component: require('./components/Profile.vue').default},
+]
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,7 +33,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+const router = new VueRouter({
+    mode: 'history',
+    routes
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,5 +45,5 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app', router
 });
