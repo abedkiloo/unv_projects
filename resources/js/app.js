@@ -8,19 +8,44 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import VueRouter from 'vue-router'
-import { Form, HasError, AlertError } from 'vform'
+import moment from 'moment'
 
-window.Form=Form;
-Vue.use(VueRouter)
+import swal from 'sweetalert2'
+window.swal = swal;
+
+
+import {AlertError, Form, HasError} from 'vform'
+window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
+
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+window.toast = toast;
+
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+})
 
 let routes = [
     {path: '/dashboard', component: require('./components/Dashboard.vue').default},
     {path: '/users', component: require('./components/Users.vue').default},
     {path: '/profile', component: require('./components/Profile.vue').default},
 ]
+//ve progress bar
+
+
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -38,6 +63,22 @@ const router = new VueRouter({
     routes
 })
 
+
+Vue.filter('custom_date', function (date) {
+    return moment(date).format('MMMM Do YYYY');
+})
+Vue.filter('custom_user_type', function (type) {
+    var return_type = ""
+
+    if (type == 1) {
+        return_type = "Admin";
+    } else if (type == 2) {
+        return_type = "Normal User";
+    } else if (type == 3) {
+        return_type = "Student";
+    }
+    return return_type;
+});
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

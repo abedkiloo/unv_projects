@@ -99,6 +99,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 Profile
                             </p>
                         </router-link>
+                        <vue-progress-bar></vue-progress-bar>
+
                     </li>
                     <li class="nav-item">
                         <router-link to="/users" class="nav-link">

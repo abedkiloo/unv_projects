@@ -7,7 +7,11 @@
                         <h3 class="card-title">Users Table</h3>
 
                         <div class="card-tools">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#create_user">Add User <i
+                            <button class="btn btn-success"
+                                data-toggle="modal" data-target="#create_user">
+                                <!--@click="open_modal">-->
+
+                                Add User <i
                                 class="fa fa-user-plus fa-fw"></i></button>
                         </div>
                     </div>
@@ -20,13 +24,15 @@
                                 <th>User</th>
                                 <th>Email</th>
                                 <th>Type</th>
+                                <th>Registered At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr>
-                                <td>183</td>
-                                <td>John Doe</td>
-                                <td>11-7-2014</td>
-                                <td><span class="label label-success">Approved</span></td>
+                            <tr v-for="user in users" :key="user.id">
+                                <td>{{user.id}}</td>
+                                <td>{{user.name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.type | custom_user_type}}</td>
+                                <td>{{user.created_at | custom_date}}</td>
                                 <td>
                                     <button>
                                         <i class="fa fa-edit blue"></i>
@@ -35,8 +41,8 @@
                                         <i class="fa fa-trash red"></i>
                                     </button>
                                 </td>
-                            </tr>
 
+                            </tr>
 
                             </tbody>
                         </table>
@@ -153,6 +159,7 @@
     export default {
         data() {
             return {
+                users: {},
                 form: new Form({
                     names: '',
                     type: '',
@@ -164,11 +171,28 @@
         },
         methods: {
             create_user() {
+
+                this.$Progress.start()
+
                 this.form.post('api/user')
+
+                toast.fire({
+                    type: 'success',
+                    title: 'User Created successfully'
+                })
+                this.$Progress.finish()
+
+            }, load_users() {
+                axios.get('api/user').then(({data}) => (this.users = data.data));
+            },
+            open_modal() {
+
             }
         },
         mounted() {
             console.log('Component mounted.')
+        }, created() {
+            this.load_users();
         }
     }
 </script>
