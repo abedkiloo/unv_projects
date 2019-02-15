@@ -11,15 +11,17 @@ window.Vue = require('vue');
 import moment from 'moment'
 
 import swal from 'sweetalert2'
+import {AlertError, Form, HasError} from 'vform'
+import VueRouter from 'vue-router'
+import VueProgressBar from 'vue-progressbar'
+
 window.swal = swal;
 
 
-import {AlertError, Form, HasError} from 'vform'
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
-import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const toast = swal.mixin({
@@ -30,7 +32,6 @@ const toast = swal.mixin({
 });
 window.toast = toast;
 
-import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {
     color: 'rgb(143, 255, 199)',
     failedColor: 'red',
@@ -42,9 +43,9 @@ let routes = [
     {path: '/users', component: require('./components/Users.vue').default},
     {path: '/profile', component: require('./components/Profile.vue').default},
 ]
-//ve progress bar
 
 
+window.Fire = new Vue();
 
 
 /**
@@ -73,9 +74,9 @@ Vue.filter('custom_user_type', function (type) {
     if (type == 1) {
         return_type = "Admin";
     } else if (type == 2) {
-        return_type = "Normal User";
+        return_type = "Standard User";
     } else if (type == 3) {
-        return_type = "Student";
+        return_type = "Author";
     }
     return return_type;
 });

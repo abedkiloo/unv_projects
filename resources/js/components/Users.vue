@@ -8,8 +8,8 @@
 
                         <div class="card-tools">
                             <button class="btn btn-success"
-                                data-toggle="modal" data-target="#create_user">
-                                <!--@click="open_modal">-->
+                                    @click="open_my_modal">
+                                <!--data-toggle="modal" data-target="#create_user">-->
 
                                 Add User <i
                                 class="fa fa-user-plus fa-fw"></i></button>
@@ -28,16 +28,17 @@
                                 <th>Modify</th>
                             </tr>
                             <tr v-for="user in users" :key="user.id">
+
                                 <td>{{user.id}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.type | custom_user_type}}</td>
                                 <td>{{user.created_at | custom_date}}</td>
                                 <td>
-                                    <button>
+                                    <button @click="edit_my_modal(user)">
                                         <i class="fa fa-edit blue"></i>
                                     </button>
-                                    <button>
+                                    <button @click="delete_user(user.id)">
                                         <i class="fa fa-trash red"></i>
                                     </button>
                                 </td>
@@ -55,94 +56,69 @@
         <div class="modal fade in" id="create_user" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add New User</h4>
 
+
+                    <div class="modal-body">
+                        <!-- form start -->
+                        <h5 v-show="!editMode" class="modal-title">Add New</h5>
+                        <h5 v-show="editMode" class="modal-title">Update User's Information</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span></button>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <form class="form form-inline" @submit.prevent="create_user">
-
+                    <form @submit.prevent="editMode ? update_user():create_user()">
                         <div class="modal-body">
-                            <div class="card card-info">
-                                <!-- form start -->
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="names" class="col-sm-2 control-label">Name</label>
+                            <div class="form-group">
+                                <input v-model="form.name" type="text" name="name"
+                                       placeholder="Name"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                                <has-error :form="form" field="name"></has-error>
+                            </div>
 
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control"
-                                                   id="names"
-                                                   name="names"
-                                                   v-model="form.names"
-                                                   placeholder="Names"
-                                                   :class="{'is-invalid': form.errors.has('names')}">
-                                            <has-error :form="form" field="names"></has-error>
+                            <div class="form-group">
+                                <input v-model="form.email" type="email" name="email"
+                                       placeholder="Email Address"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                                <has-error :form="form" field="email"></has-error>
+                            </div>
 
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="user_email" class="col-sm-2 control-label">Email</label>
+                            <div class="form-group">
+                            <textarea v-model="form.bio" name="bio" id="bio"
+                                      placeholder="Short bio for user (Optional)"
+                                      class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
 
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control"
-                                                   id="user_email"
-                                                   name="user_email"
-                                                   v-model="form.user_email"
-                                                   placeholder="Email"
-                                                   :class="{'is-invalid': form.errors.has('user_email')}">
-                                            <has-error :form="form" field="user_email"></has-error>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="type" class="col-sm-2 control-label">Type</label>
+                            </textarea>
+                                <has-error :form="form" field="bio"></has-error>
+                            </div>
 
-                                        <div class="col-sm-10">
-                                            <select class="form-control"
-                                                    :class="{'is-invalid': form.errors.has('type')}"
-                                                    id="type"
-                                                    name="type"
-                                                    v-model="form.type">
-                                                <option value="">--Select User --</option>
-                                                <option value="1">Admin</option>
-                                                <option value="2">Author</option>
-                                                <option value="3">Standard User</option>
-                                            </select>
-                                            <has-error :form="form" field="type"></has-error>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="bio" class="col-sm-2 control-label">Bio</label>
 
-                                        <div class="col-sm-10">
-                                            <textarea class="form-control"
-                                                      id="bio"
-                                                      name="bio"
-                                                      v-model="form.bio"
-                                                      :class="{'is-invalid': form.errors.has('user_password')}">
-                                            </textarea>
-                                            <has-error :form="form" field="bio"></has-error>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="user_password" class="col-sm-2 control-label">Password</label>
+                            <div class="form-group">
+                                <select name="type" v-model="form.type" id="type" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('type') }">
+                                    <option value="">Select User Role</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Standard User</option>
+                                    <option value="3">Author</option>
+                                </select>
+                                <has-error :form="form" field="type"></has-error>
+                            </div>
 
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control"
-                                                   id="user_password"
-                                                   name="user_password"
-                                                   v-model="form.user_password"
-                                                   placeholder="Password"
-                                                   :class="{'is-invalid': form.errors.has('user_password')}">
-                                            <has-error :form="form" field="user_password"></has-error>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <input v-show="!editMode" v-model="form.password" type="password" name="password"
+                                       id="password"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                <has-error :form="form" field="password"></has-error>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close
+                            </button>
+                            <button v-show="!editMode" :disabled="form.busy" type="submit" class="btn btn-primary">
+                                Create
+                            </button>
+                            <button v-show="editMode" :disabled="form.busy" type="submit" class="btn btn-success">
+                                Update
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -159,40 +135,129 @@
     export default {
         data() {
             return {
+                editMode: false,
                 users: {},
                 form: new Form({
-                    names: '',
+                    id: '',
+                    name: '',
+                    email: '',
+                    password: '',
                     type: '',
-                    user_email: '',
-                    user_password: '',
                     bio: '',
+                    photo: ''
                 })
             }
         },
         methods: {
+            update_user() {
+                this.$Progress.start();
+
+                this.form.put('api/user/' + this.form.id)
+                    .then(() => {
+                        Fire.$emit('UserUpdated')
+                        $('#create_user').modal('hide');
+                        swal.fire(
+                            'Updated',
+                            'User Updated successfully',
+                            'success',
+                        )
+                        this.$Progress.finish();
+
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
+                    })
+            },
+            delete_user(id) {
+                swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.$Progress.start();
+
+                        this.form.delete('api/user/' + id)
+                            .then(() => {
+
+                                swal.fire(
+                                    'Deleted!',
+                                    'The User has been deleted.',
+                                    'success'
+                                )
+                                Fire.$emit("UserDeleted");
+                                this.$Progress.finish();
+
+
+                            })
+                            .catch(() => {
+                                swal.fire(
+                                    'Opps',
+                                    'Something Went Wrong :)',
+                                    'error'
+                                )
+                                this.$Progress.fail();
+
+                            })
+
+                    }
+                })
+
+
+            },
             create_user() {
 
-                this.$Progress.start()
+                this.$Progress.start();
 
                 this.form.post('api/user')
+                    .then(() => {
+                        Fire.$emit("UserCreated")
 
-                toast.fire({
-                    type: 'success',
-                    title: 'User Created successfully'
-                })
-                this.$Progress.finish()
+                        $('#create_user').modal('hide');
 
-            }, load_users() {
+                        toast.fire({
+                            type: 'success',
+                            title: 'User Created successfully'
+                        })
+                        this.$Progress.finish()
+                    })
+                    .catch(() => {
+                        this.$Progress.fail();
+                    });
+
+
+            }
+            ,
+            load_users() {
                 axios.get('api/user').then(({data}) => (this.users = data.data));
-            },
-            open_modal() {
-
+            }
+            ,
+            open_my_modal() {
+                this.editMode = false;
+                this.form.reset();
+                $("#create_user").modal('show');
+            }, edit_my_modal(user) {
+                this.editMode = true;
+                console.log(user)
+                this.form.reset();
+                $("#create_user").modal('show');
+                this.form.fill(user)
             }
         },
         mounted() {
             console.log('Component mounted.')
-        }, created() {
+        }
+        ,
+        created() {
             this.load_users();
+            Fire.$on("UserCreated", () => this.load_users());
+            Fire.$on("UserDeleted", () => this.load_users());
+            Fire.$on("UserUpdated", () => this.load_users());
+            // setInterval(() => this.load_users(), 10000);
         }
     }
 </script>

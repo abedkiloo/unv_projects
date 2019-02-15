@@ -24,28 +24,27 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
+//        return $request['type'];
 
         $this->validate($request, [
-            'names' => 'required|string|max:191',
-            'user_email' => 'required|email|unique:users,email',
-            'user_password' => 'required|string|min:6'
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users',
+            'password' => 'required|string|min:6'
         ]);
-        $user = $request->all();
-        if (User::where('email', $user['user_email'])->exists()) {
-            return $request;
-        } else {
-            $new_user = new User();
-            $new_user->name = $user['names'];
-            $new_user->email = $user['user_email'];
-            $new_user->type = $user['type'];
-            $new_user->password = Hash::make($user['user_password']);
-            $new_user->bio = $user['bio'];
-            $new_user->save();
-            return "saved";
-        }
+        $new_user = new User();
+        $new_user->name = $request->all()['name'];
+        $new_user->email = $request->all()['email'];
+        $new_user->type = $request->all()['type'];
+        $new_user->bio = $request->all()['bio'];
+//        $new_user->photo = $request->all()['photo'];
+        $new_user->password = Hash::make($request['password']);
+        $new_user->save();
+        return response($new_user);
+
 
     }
 
@@ -67,10 +66,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'password' => 'sometimes|string|min:6'
+        ]);
+        $user->update($request->all());
+        return response(['message'=>'user updated']);
     }
 
     /**
@@ -81,6 +89,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return response(['message' => "User Deleted"]);
     }
 }
