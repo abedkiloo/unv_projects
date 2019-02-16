@@ -4,21 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -70,6 +64,13 @@ class UserController extends Controller
         //
     }
 
+
+    public function profile()
+    {
+        return response(['auth',"sucees"]);
+        return auth('api')->user();
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -84,11 +85,11 @@ class UserController extends Controller
 
         $this->validate($request, [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:191|unique:users,email,' . $user->id,
             'password' => 'sometimes|string|min:6'
         ]);
         $user->update($request->all());
-        return response(['message'=>'user updated']);
+        return response(['message' => 'user updated']);
     }
 
     /**

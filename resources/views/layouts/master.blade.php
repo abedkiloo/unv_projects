@@ -84,10 +84,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </router-link>
                     </li>   <li class="nav-item">
-                        <router-link to="/developer" class="nav-link">
+                        <router-link to="/phases" class="nav-link">
                             <i class="nav-icon fas fa-periscope orange"></i>
                             <p>
-                                Developer
+                                Phases
                                 <!--<span class="right badge badge-danger">New</span>-->
                             </p>
                         </router-link>
@@ -164,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2014-2018 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2019-2019 <a href="https://adminlte.io">UNV Projects</a>.</strong> All rights reserved.
     </footer>
 </div>
 <!-- ./wrapper -->
