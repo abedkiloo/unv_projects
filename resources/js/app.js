@@ -24,6 +24,9 @@ Vue.component(AlertError.name, AlertError)
 
 Vue.use(VueRouter)
 
+
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 const toast = swal.mixin({
     toast: true,
     position: 'top-end',
@@ -40,9 +43,9 @@ Vue.use(VueProgressBar, {
 
 let routes = [
     {path: '/phases', component: require('./components/Phases.vue').default},
-    {path: '/dashboard', component: require('./components/Dashboard.vue').default},
-    {path: '/users', component: require('./components/Users.vue').default},
-    {path: '/profile', component: require('./components/Profile.vue').default},
+    {path: '/disbursment', component: require('./components/Disbursements.vue').default},
+    {path: '/projects', component: require('./components/Projects.vue').default},
+    {path: '/country', component: require('./components/Country.vue').default},
 ]
 
 

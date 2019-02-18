@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDisbursmentsTable extends Migration
+class Status extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateDisbursmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_disbursments', function (Blueprint $table) {
+        Schema::create('tbl_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('amount');
-            $table->string('phase_id');
-            $table->string('project_id');
+            $table->string('country_name');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateDisbursmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_disbursments');
+        Schema::dropIfExists('tbl_status');
     }
 }

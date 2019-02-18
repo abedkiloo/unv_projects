@@ -4,14 +4,13 @@
             <div class="col-sm-12 mt-2">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Disbursement Table</h3>
+                        <h3 class="card-title">Country</h3>
 
                         <div class="card-tools">
                             <button class="btn btn-success"
                                     @click="open_my_modal">
-                                <!--data-toggle="modal" data-target="#create_disburse">-->
-
-                                Add Disburse <i
+                                <!--data-toggle="modal" data-target="#create_country">-->
+                                Add Country <i
                                 class="fa fa-user-plus fa-fw"></i></button>
                         </div>
                     </div>
@@ -21,22 +20,17 @@
                             <tbody>
                             <tr>
                                 <th>ID</th>
-                                <th>Phase</th>
-                                <th>Amount</th>
-                                <th>Released At</th>
-                                <th>Modify</th>
+                                <th>Country Name</th>
                             </tr>
-                            <tr v-for="disburse in disbursements" :key="disburse.id">
+                            <tr v-for="country in countries" :key="country.id">
 
-                                <td>{{disburse.id}}</td>
-                                <td>{{disburse.phase_id.phase_name}}</td>
-                                <td>{{disburse.project_id}}</td>
-                                <td>{{disburse.amount}}</td>
+                                <td>{{country.id}}</td>
+                                <td>{{country.country_name}}</td>
                                 <td>
-                                    <button @click="edit_my_modal(disburse)">
+                                    <button @click="edit_my_modal(country)">
                                         <i class="fa fa-edit blue"></i>
                                     </button>
-                                    <button @click="delete_disburse(disburse.id)">
+                                    <button @click="delete_country(country.id)">
                                         <i class="fa fa-trash red"></i>
                                     </button>
                                 </td>
@@ -51,46 +45,26 @@
                 <!-- /.card -->
             </div>
         </div>
-        <div class="modal fade in" id="create_disburse" role="dialog">
+        <div class="modal fade in" id="create_country" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
 
 
                     <div class="modal-body">
                         <!-- form start -->
-                        <h5 v-show="!editMode" class="modal-title">Add Disburse</h5>
-                        <h5 v-show="editMode" class="modal-title">Update Disburse's Information</h5>
+                        <h5 v-show="!editMode" class="modal-title">Add New</h5>
+                        <h5 v-show="editMode" class="modal-title">Update Country's Information</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editMode ? update_disburse():create_disburse()">
+                    <form @submit.prevent="editMode ? update_country():create_country()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <input v-model="form.amount" type="text" name="amount"
-                                       placeholder="Amount"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
-                                <has-error :form="form" field="amount"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                                <select name="type" v-model="form.phase_id" id="phase_id"
-                                        class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('phase_id') }">
-                                    <option value="">Select Phase</option>
-                                    <option v-for="phase in phases" :value="phase.id">{{phase.phase_name}}</option>
-                                </select>
-                                <has-error :form="form" field="phase_id"></has-error>
-                            </div>
-                            <div class="form-group">
-                                <select name="type" v-model="form.project_id" id="type" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('project_id') }">
-                                    <option value="">Select Project</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Standard User</option>
-                                    <option value="3">Author</option>
-                                </select>
-                                <has-error :form="form" field="project_id"></has-error>
+                                <input v-model="form.country_name" type="text" name="country_name"
+                                       placeholder="Country Name (Ethiopia)"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('country_name') }">
+                                <has-error :form="form" field="country_name"></has-error>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -118,32 +92,25 @@
     export default {
         data() {
             return {
-                phases: {},
                 editMode: false,
-                disbursements: {},
+                countries: {},
                 form: new Form({
                     id: '',
-                    amount: '',
-                    phase_id: '',
-                    project_id: '',
+                    country_name: '',
                 })
             }
         },
         methods: {
-
-            load_phases() {
-                axios.get('api/phase').then(({data}) => (this.phases = data.data));
-            },
-            update_disburse() {
+            update_country() {
                 this.$Progress.start();
 
-                this.form.put('api/disburse/' + this.form.id)
+                this.form.put('api/country/' + this.form.id)
                     .then(() => {
-                        Fire.$emit('DisburseUpdated')
-                        $('#create_disburse').modal('hide');
+                        Fire.$emit('CountryUpdated')
+                        $('#create_country').modal('hide');
                         swal.fire(
                             'Updated',
-                            'Disburse Updated successfully',
+                            'User Updated successfully',
                             'success',
                         )
                         this.$Progress.finish();
@@ -153,7 +120,7 @@
                         this.$Progress.fail();
                     })
             },
-            delete_disburse(id) {
+            delete_country(id) {
                 swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -166,15 +133,15 @@
                     if (result.value) {
                         this.$Progress.start();
 
-                        this.form.delete('api/disburse/' + id)
+                        this.form.delete('api/country' + id)
                             .then(() => {
 
                                 swal.fire(
                                     'Deleted!',
-                                    'The Disburse has been deleted.',
+                                    'The Phase has been deleted.',
                                     'success'
                                 )
-                                Fire.$emit("DisburseDeleted");
+                                Fire.$emit("CountryDeleted");
                                 this.$Progress.finish();
 
 
@@ -194,19 +161,19 @@
 
 
             },
-            create_disburse() {
+            create_country() {
 
                 this.$Progress.start();
 
-                this.form.post('api/disburse')
+                this.form.post('api/country')
                     .then(() => {
-                        Fire.$emit("DisburseCreated")
+                        Fire.$emit("CountryCreated")
 
-                        $('#create_disburse').modal('hide');
+                        $('#create_country').modal('hide');
 
                         toast.fire({
                             type: 'success',
-                            title: 'Disburse Created successfully'
+                            title: 'Phase Created successfully'
                         })
                         this.$Progress.finish()
                     })
@@ -217,19 +184,19 @@
 
             }
             ,
-            load_disburse() {
-                axios.get('api/disburse').then(({data}) => (this.disbursements = data.data));
+            load_countries() {
+                axios.get('api/country').then(({data}) => (this.countries = data.data));
             }
             ,
             open_my_modal() {
                 this.editMode = false;
                 this.form.reset();
-                $("#create_disburse").modal('show');
+                $("#create_country").modal('show');
             }, edit_my_modal(user) {
                 this.editMode = true;
                 console.log(user)
                 this.form.reset();
-                $("#create_disburse").modal('show');
+                $("#create_country").modal('show');
                 this.form.fill(user)
             }
         },
@@ -238,12 +205,11 @@
         }
         ,
         created() {
-            this.load_phases();
-            this.load_disburse();
-            Fire.$on("DisburseCreated", () => this.load_disburse());
-            Fire.$on("DisburseDeleted", () => this.load_disburse());
-            Fire.$on("DisburseUpdated", () => this.load_disburse());
-            // setInterval(() => this.load_users(), 10000);
+            this.load_countries();
+            Fire.$on("CountryCreated", () => this.load_countries());
+            Fire.$on("CountryDeleted", () => this.load_countries());
+            Fire.$on("CountryUpdated", () => this.load_countries());
+            // setInterval(() => this.load_countries(), 10000);
         }
     }
 </script>

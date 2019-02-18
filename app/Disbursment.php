@@ -6,11 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Disbursment extends Model
 {
-        protected $table = 'tbl_disbursments';
+    protected $table = 'tbl_disbursments';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'amount',
+        'phase_id',
+        'project_id',
+    ];
 
     public function phase_id()
     {
-        return $this->hasOne('App\PhaseOfDisbursement', 'tbl_phase_of_disbursments.id', 'tbl_disbursments.id');
+        return $this->hasOne('App\PhaseOfDisbursment', 'id', 'id');
     }
 
 }

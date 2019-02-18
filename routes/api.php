@@ -20,4 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResources(['user' => 'API\UserController']);
 Route::apiResources(['phase' => 'API\PhaseController']);
+Route::apiResources(['project' => 'API\ProjectController']);
+Route::apiResources(['disburse' => 'API\DisbursmentController']);
+Route::apiResources(['country' => 'API\CountryController']);
 Route::get('profile', 'API\UserController@profile');

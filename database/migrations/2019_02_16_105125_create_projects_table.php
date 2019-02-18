@@ -17,14 +17,14 @@ class CreateProjectsTable extends Migration
             $table->increments('id');
             $table->string('project_ref');
             $table->string('project_title');
-            $table->string('date_of_gcf');
+            $table->string('date_of_gcf')->nullable();
             $table->string('start_date');
             $table->string('duration');
             $table->string('end_date');
-            $table->string('disbursement_id');
-            $table->string('readiness_id');
-            $table->string('readiness_or_nap');
-            $table->string('status_id');
+            $table->string('disbursement_id')->nullable();
+            $table->string('readiness_id')->nullable();
+            $table->string('readiness_or_nap')->nullable();
+            $table->string('status_id')->nullable();
             $table->timestamps();
         });
     }
