@@ -15,7 +15,7 @@ class Status extends Migration
     {
         Schema::create('tbl_status', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('country_name');
+            $table->string('status_name');
             $table->timestamps();
         });
     }

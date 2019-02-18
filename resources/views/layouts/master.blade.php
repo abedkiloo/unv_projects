@@ -111,10 +111,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </li>
                     <li class="nav-item">
-                        <router-link to="/users" class="nav-link">
+                        <router-link to="/status" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
-                                Users
+                                Status
                             </p>
                         </router-link>
                     </li>

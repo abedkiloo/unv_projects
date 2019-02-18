@@ -4,14 +4,13 @@
             <div class="col-sm-12 mt-2">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Users Table</h3>
+                        <h3 class="card-title">status</h3>
 
                         <div class="card-tools">
                             <button class="btn btn-success"
                                     @click="open_my_modal">
-                                <!--data-toggle="modal" data-target="#create_user">-->
-
-                                Add User <i
+                                <!--data-toggle="modal" data-target="#create_status">-->
+                                Add status <i
                                 class="fa fa-user-plus fa-fw"></i></button>
                         </div>
                     </div>
@@ -21,24 +20,17 @@
                             <tbody>
                             <tr>
                                 <th>ID</th>
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Type</th>
-                                <th>Registered At</th>
-                                <th>Modify</th>
+                                <th>Status Name</th>
                             </tr>
-                            <tr v-for="user in users" :key="user.id">
+                            <tr v-for="status in status" :key="status.id">
 
-                                <td>{{user.id}}</td>
-                                <td>{{user.name}}</td>
-                                <td>{{user.email}}</td>
-                                <td>{{user.type | custom_user_type}}</td>
-                                <td>{{user.created_at | custom_date}}</td>
+                                <td>{{status.id}}</td>
+                                <td>{{status.status_name}}</td>
                                 <td>
-                                    <button @click="edit_my_modal(user)">
+                                    <button @click="edit_my_modal(status)">
                                         <i class="fa fa-edit blue"></i>
                                     </button>
-                                    <button @click="delete_user(user.id)">
+                                    <button @click="delete_status(status.id)">
                                         <i class="fa fa-trash red"></i>
                                     </button>
                                 </td>
@@ -53,7 +45,7 @@
                 <!-- /.card -->
             </div>
         </div>
-        <div class="modal fade in" id="create_user" role="dialog">
+        <div class="modal fade in" id="create_status" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
 
@@ -66,48 +58,13 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editMode ? update_user():create_user()">
+                    <form @submit.prevent="editMode ? update_status():create_status()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <input v-model="form.name" type="text" name="name"
-                                       placeholder="Name"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                                <has-error :form="form" field="name"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                                <input v-model="form.email" type="email" name="email"
-                                       placeholder="Email Address"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                                <has-error :form="form" field="email"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                            <textarea v-model="form.bio" name="bio" id="bio"
-                                      placeholder="Short bio for user (Optional)"
-                                      class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
-
-                            </textarea>
-                                <has-error :form="form" field="bio"></has-error>
-                            </div>
-
-
-                            <div class="form-group">
-                                <select name="type" v-model="form.type" id="type" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('type') }">
-                                    <option value="">Select User Role</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Standard User</option>
-                                    <option value="3">Author</option>
-                                </select>
-                                <has-error :form="form" field="type"></has-error>
-                            </div>
-
-                            <div class="form-group">
-                                <input v-show="!editMode" v-model="form.password" type="password" name="password"
-                                       id="password"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                                <has-error :form="form" field="password"></has-error>
+                                <input v-model="form.status_name" type="text" name="status_name"
+                                       placeholder="Pase Name (First Disburse)"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('status_name') }">
+                                <has-error :form="form" field="status_name"></has-error>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -136,26 +93,21 @@
         data() {
             return {
                 editMode: false,
-                users: {},
+                status: {},
                 form: new Form({
                     id: '',
-                    name: '',
-                    email: '',
-                    password: '',
-                    type: '',
-                    bio: '',
-                    photo: ''
+                    status_name: '',
                 })
             }
         },
         methods: {
-            update_user() {
+            update_status() {
                 this.$Progress.start();
 
-                this.form.put('api/user/' + this.form.id)
+                this.form.put('api/status/' + this.form.id)
                     .then(() => {
-                        Fire.$emit('UserUpdated')
-                        $('#create_user').modal('hide');
+                        Fire.$emit('StatusUpdated')
+                        $('#create_status').modal('hide');
                         swal.fire(
                             'Updated',
                             'User Updated successfully',
@@ -168,7 +120,7 @@
                         this.$Progress.fail();
                     })
             },
-            delete_user(id) {
+            delete_status(id) {
                 swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -181,15 +133,15 @@
                     if (result.value) {
                         this.$Progress.start();
 
-                        this.form.delete('api/user/' + id)
+                        this.form.delete('api/status/' + id)
                             .then(() => {
 
                                 swal.fire(
                                     'Deleted!',
-                                    'The User has been deleted.',
+                                    'The status has been deleted.',
                                     'success'
                                 )
-                                Fire.$emit("UserDeleted");
+                                Fire.$emit("statusDeleted");
                                 this.$Progress.finish();
 
 
@@ -209,19 +161,19 @@
 
 
             },
-            create_user() {
+            create_status() {
 
                 this.$Progress.start();
 
-                this.form.post('api/user')
+                this.form.post('api/status')
                     .then(() => {
-                        Fire.$emit("UserCreated")
+                        Fire.$emit("statusCreated")
 
-                        $('#create_user').modal('hide');
+                        $('#create_status').modal('hide');
 
                         toast.fire({
                             type: 'success',
-                            title: 'User Created successfully'
+                            title: 'status Created successfully'
                         })
                         this.$Progress.finish()
                     })
@@ -232,19 +184,19 @@
 
             }
             ,
-            load_users() {
-                axios.get('api/user').then(({data}) => (this.users = data.data));
+            load_status() {
+                axios.get('api/status').then(({data}) => (this.status = data.data));
             }
             ,
             open_my_modal() {
                 this.editMode = false;
                 this.form.reset();
-                $("#create_user").modal('show');
+                $("#create_status").modal('show');
             }, edit_my_modal(user) {
                 this.editMode = true;
                 console.log(user)
                 this.form.reset();
-                $("#create_user").modal('show');
+                $("#create_status").modal('show');
                 this.form.fill(user)
             }
         },
@@ -253,11 +205,11 @@
         }
         ,
         created() {
-            this.load_users();
-            Fire.$on("UserCreated", () => this.load_users());
-            Fire.$on("UserDeleted", () => this.load_users());
-            Fire.$on("UserUpdated", () => this.load_users());
-            // setInterval(() => this.load_users(), 10000);
+            this.load_status();
+            Fire.$on("statusCreated", () => this.load_status());
+            Fire.$on("statusDeleted", () => this.load_status());
+            Fire.$on("StatusUpdated", () => this.load_status());
+            // setInterval(() => this.load_status(), 10000);
         }
     }
 </script>

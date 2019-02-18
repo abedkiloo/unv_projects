@@ -23,4 +23,7 @@ Route::apiResources(['phase' => 'API\PhaseController']);
 Route::apiResources(['project' => 'API\ProjectController']);
 Route::apiResources(['disburse' => 'API\DisbursmentController']);
 Route::apiResources(['country' => 'API\CountryController']);
+Route::apiResources(['status' => 'API\StatusController']);
 Route::get('profile', 'API\UserController@profile');
+Route::get('projects/all', 'API\ProjectController@all');
+Route::get('projects/country/{country_id} ', 'API\ProjectController@all');

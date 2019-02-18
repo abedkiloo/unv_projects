@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Disbursment;
-use App\Http\Controllers\Controller;
+use App\PhaseOfDisbursment;
+use App\Status;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class DisbursmentController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +16,7 @@ class DisbursmentController extends Controller
      */
     public function index()
     {
-//        return Disbursment::latest()->paginate(5);
-//        return Disbursment::latest()->with(['phase_id'])->paginate(5);
-        return Disbursment::latest()->with(['phase_id','projects',])->paginate(5);
+        return Status::latest()->paginate(5);
 
     }
 
@@ -30,23 +29,20 @@ class DisbursmentController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
-            'amount' => 'required|integer',
-            'phase_id' => 'required|integer|max:191',
-            'project_id' => 'required|integer|max:191',
+            'status_name' => 'required|string|max:191',
         ]);
-        $new_disburse = new Disbursment();
-        $new_disburse->amount = $request->all()['amount'];
-        $new_disburse->phase_id = $request->all()['phase_id'];
-        $new_disburse->project_id = $request->all()['project_id'];
-        $new_disburse->save();
-        return response($new_disburse);
+        $new_status= new Status();
+        $new_status->status_name = $request->all()['status_name'];
+        $new_status->save();
+        return response($new_status);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -64,25 +60,27 @@ class DisbursmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $phase = Disbursment::findOrFail($id);
+        $phase = Status::findOrFail($id);
 
         $this->validate($request, [
-            'amount' => 'required|integer',
-            'phase_id' => 'required|integer|max:191',
-            'project_id' => 'required|integer|max:191',
+            'status_name' => 'required|string|max:191',
         ]);
         $phase->update($request->all());
-        return response(['message' => 'phase updated']);
+        return response(['message' => 'status updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $phase = Status::findOrFail($id);
+
+        $phase->delete();
+
+        return response(['message' => "status Deleted"]);
     }
 }

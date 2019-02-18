@@ -14,6 +14,7 @@ import swal from 'sweetalert2'
 import {AlertError, Form, HasError} from 'vform'
 import VueRouter from 'vue-router'
 import VueProgressBar from 'vue-progressbar'
+import Datepicker from 'vuejs-datepicker';
 
 window.swal = swal;
 
@@ -22,6 +23,7 @@ window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
+Vue.use(Datepicker)
 Vue.use(VueRouter)
 
 
@@ -45,6 +47,7 @@ let routes = [
     {path: '/phases', component: require('./components/Phases.vue').default},
     {path: '/disbursment', component: require('./components/Disbursements.vue').default},
     {path: '/projects', component: require('./components/Projects.vue').default},
+    {path: '/status', component: require('./components/Status.vue').default},
     {path: '/country', component: require('./components/Country.vue').default},
 ]
 
@@ -81,6 +84,16 @@ Vue.filter('custom_user_type', function (type) {
         return_type = "Standard User";
     } else if (type == 3) {
         return_type = "Author";
+    }
+    return return_type;
+});
+Vue.filter('ready_nap', function (type) {
+    var return_type = ""
+
+    if (type == 1) {
+        return_type = "Readiness";
+    } else if (type == 2) {
+        return_type = "NAP";
     }
     return return_type;
 });

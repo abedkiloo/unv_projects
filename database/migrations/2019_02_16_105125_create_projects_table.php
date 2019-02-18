@@ -19,8 +19,11 @@ class CreateProjectsTable extends Migration
             $table->string('project_title');
             $table->string('date_of_gcf')->nullable();
             $table->string('start_date');
+            $table->string('implementing_office');
             $table->string('duration');
+            $table->string('amount');
             $table->string('end_date');
+            $table->string('country_id')->nullable();
             $table->string('disbursement_id')->nullable();
             $table->string('readiness_id')->nullable();
             $table->string('readiness_or_nap')->nullable();

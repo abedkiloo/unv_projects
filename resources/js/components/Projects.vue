@@ -28,7 +28,7 @@
                                 <th>Grant amount (USD)</th>
                                 <th>Date Of GCF</th>
                                 <th>Duration (months)</th>
-                                <th>Duration</th>
+                                <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Readiness or NAP</th>
                                 <th>Type of readiness</th>
@@ -39,14 +39,18 @@
 
                                 <td>{{project.id}}</td>
                                 <td>{{project.project_ref}}</td>
+                                <td>{{project.implementing_office}}</td>
+                                <td>{{project.project_country.country_name}}</td>
                                 <td>{{project.project_title}}</td>
-                                <td>{{project.date_of_gcf | custom_date}}</td>
-                                <td>{{project.start_date | custom_date}}</td>
+                                <td>{{project.amount }}</td>
+                                <td>{{project.date_of_gcf }}</td>
                                 <td>{{project.duration}}</td>
-                                <td>{{project.end_date | custom_date}}</td>
+                                <td>{{project.start_date }}</td>
+                                <td>{{project.end_date }}</td>
+                                <td>{{project.readiness_or_nap | ready_nap}}</td>
                                 <td>{{project.disbursement_id}}</td>
                                 <td>{{project.readiness_id }}</td>
-                                <td>{{project.readiness_or_nap }}</td>
+                                <td>{{project.readiness_id }}</td>
                                 <td>
                                     <button @click="edit_my_modal(project)">
                                         <i class="fa fa-edit blue"></i>
@@ -98,6 +102,23 @@
                             </div>
 
                             <div class="form-group">
+                                <select name="type" v-model="form.country_id" id="type" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('country_id') }">
+                                    <option value="">Select Country</option>
+                                    <option v-for="country in countries" :value="country.id">{{country.country_name}}</option>
+
+                                </select>
+                                <has-error :form="form" field="country_id"></has-error>
+                            </div>
+
+                            <div class="form-group">
+                                <input v-model="form.implementing_office" type="text" name="implementing_office"
+                                       placeholder="Implemeting Office"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('implementing_office') }">
+                                <has-error :form="form" field="implementing_office"></has-error>
+                            </div>
+
+                            <div class="form-group">
                                 <input v-model="form.date_of_gcf" type="text" name="date_of_gcf"
                                        placeholder="Date Of GCF"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('date_of_gcf') }">
@@ -124,24 +145,23 @@
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('duration') }">
                                 <has-error :form="form" field="duration"></has-error>
                             </div>
+                            <div class="form-group">
+                                <input v-model="form.amount" type="text" name="amount"
+                                       placeholder="Amount"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
+                                <has-error :form="form" field="amount"></has-error>
+                            </div>
 
                             <div class="form-group">
-                                <select name="type" v-model="form.disbursement_id" id="type" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('disbursement_id') }">
-                                    <option value="">Select User Role</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Standard User</option>
-                                    <option value="3">Author</option>
+                                <select name="readiness_or_nap" v-model="form.readiness_or_nap" id="readiness_or_nap" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('readiness_or_nap') }">
+                                    <option value="">Select Readiness or NAP</option>
+                                    <option value="1">Readiness</option>
+                                    <option value="2">NAP</option>
                                 </select>
-                                <has-error :form="form" field="disbursement_id"></has-error>
+                                <has-error :form="form" field="readiness_or_nap"></has-error>
                             </div>
 
-                            <div class="form-group">
-                                <input v-show="!editMode" v-model="form.password" type="password" name="password"
-                                       id="password"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                                <has-error :form="form" field="password"></has-error>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close
@@ -170,13 +190,17 @@
             return {
                 editMode: false,
                 projects: {},
+                countries: {},
                 form: new Form({
                     id: '',
                     project_ref: '',
                     project_title: '',
+                    implementing_office: '',
                     date_of_gcf: '',
                     start_date: '',
+                    country_id: '',
                     duration: '',
+                    amount: '',
                     end_date: '',
                     disbursement_id: '',
                     readiness_id: '',
@@ -277,6 +301,9 @@
             ,
             load_projects() {
                 axios.get('api/project').then(({data}) => (this.projects = data));
+            },
+            load_countries() {
+                axios.get('api/country').then(({data}) => (this.countries = data.data));
             }
             ,
             open_my_modal() {
@@ -297,6 +324,7 @@
         ,
         created() {
             this.load_projects();
+            this.load_countries();
             Fire.$on("ProjectCreated", () => this.load_projects());
             Fire.$on("ProjectDeleted", () => this.load_projects());
             Fire.$on("ProjectUpdated", () => this.load_projects());

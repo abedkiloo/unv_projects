@@ -21,6 +21,7 @@
                             <tbody>
                             <tr>
                                 <th>ID</th>
+                                <th>Project Name</th>
                                 <th>Phase</th>
                                 <th>Amount</th>
                                 <th>Released At</th>
@@ -29,6 +30,7 @@
                             <tr v-for="disburse in disbursements" :key="disburse.id">
 
                                 <td>{{disburse.id}}</td>
+                                <td>{{disburse.projects.project_title}}</td>
                                 <td>{{disburse.phase_id.phase_name}}</td>
                                 <td>{{disburse.project_id}}</td>
                                 <td>{{disburse.amount}}</td>
@@ -86,9 +88,8 @@
                                 <select name="type" v-model="form.project_id" id="type" class="form-control"
                                         :class="{ 'is-invalid': form.errors.has('project_id') }">
                                     <option value="">Select Project</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Standard User</option>
-                                    <option value="3">Author</option>
+                                    <option v-for="project in projects" :value="project.id">{{project.project_title}}
+                                    </option>
                                 </select>
                                 <has-error :form="form" field="project_id"></has-error>
                             </div>
@@ -120,6 +121,7 @@
             return {
                 phases: {},
                 editMode: false,
+                projects: {},
                 disbursements: {},
                 form: new Form({
                     id: '',
@@ -220,6 +222,9 @@
             load_disburse() {
                 axios.get('api/disburse').then(({data}) => (this.disbursements = data.data));
             }
+            , load_projects() {
+                axios.get('api/project').then(({data}) => (this.projects = data.data));
+            }
             ,
             open_my_modal() {
                 this.editMode = false;
@@ -240,6 +245,7 @@
         created() {
             this.load_phases();
             this.load_disburse();
+            this.load_projects();
             Fire.$on("DisburseCreated", () => this.load_disburse());
             Fire.$on("DisburseDeleted", () => this.load_disburse());
             Fire.$on("DisburseUpdated", () => this.load_disburse());
