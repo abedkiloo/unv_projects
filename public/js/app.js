@@ -2650,12 +2650,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       editMode: false,
       projects: {},
+      readiness_types: {},
       countries: {},
       form: new Form({
         id: '',
@@ -2759,6 +2759,14 @@ __webpack_require__.r(__webpack_exports__);
         return _this6.countries = data.data;
       });
     },
+    load_readiness_type: function load_readiness_type() {
+      var _this7 = this;
+
+      axios.get('api/readiness_type').then(function (_ref3) {
+        var data = _ref3.data;
+        return _this7.readiness_types = data.data;
+      });
+    },
     open_my_modal: function open_my_modal() {
       this.editMode = false;
       this.form.reset();
@@ -2776,19 +2784,231 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    var _this7 = this;
+    var _this8 = this;
 
     this.load_projects();
     this.load_countries();
     Fire.$on("ProjectCreated", function () {
-      return _this7.load_projects();
+      return _this8.load_projects();
     });
     Fire.$on("ProjectDeleted", function () {
-      return _this7.load_projects();
+      return _this8.load_projects();
     });
     Fire.$on("ProjectUpdated", function () {
-      return _this7.load_projects();
+      return _this8.load_projects();
     }); // setInterval(() => this.load_projects(), 10000);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ReadinessType.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ReadinessType.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      editMode: false,
+      readiness_types: {},
+      form: new Form({
+        id: '',
+        readiness_type_name: ''
+      })
+    };
+  },
+  methods: {
+    update_readiness_types: function update_readiness_types() {
+      var _this = this;
+
+      this.$Progress.start();
+      this.form.put('api/readiness_type/' + this.form.id).then(function () {
+        Fire.$emit('ReadinessTypesUpdated');
+        $('#create_readiness_types').modal('hide');
+        swal.fire('Updated', 'Readiness Types Updated successfully', 'success');
+
+        _this.$Progress.finish();
+      }).catch(function () {
+        _this.$Progress.fail();
+      });
+    },
+    delete_readiness_types: function delete_readiness_types(id) {
+      var _this2 = this;
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          _this2.$Progress.start();
+
+          _this2.form.delete('api/readiness_type/' + id).then(function () {
+            swal.fire('Deleted!', 'The Readiness Type has been deleted.', 'success');
+            Fire.$emit("PhaseDeleted");
+
+            _this2.$Progress.finish();
+          }).catch(function () {
+            swal.fire('Opps', 'Something Went Wrong :)', 'error');
+
+            _this2.$Progress.fail();
+          });
+        }
+      });
+    },
+    create_readiness_types: function create_readiness_types() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.form.post('api/readiness_type').then(function () {
+        Fire.$emit("ReadinessTypeCreated");
+        $('#create_readiness_types').modal('hide');
+        toast.fire({
+          type: 'success',
+          title: 'Readiness Type Created successfully'
+        });
+
+        _this3.$Progress.finish();
+      }).catch(function () {
+        _this3.$Progress.fail();
+      });
+    },
+    load_readiness_types: function load_readiness_types() {
+      var _this4 = this;
+
+      axios.get('api/readiness_type').then(function (_ref) {
+        var data = _ref.data;
+        return _this4.readiness_types = data.data;
+      });
+    },
+    open_my_modal: function open_my_modal() {
+      this.editMode = false;
+      this.form.reset();
+      $("#create_readiness_types").modal('show');
+    },
+    edit_my_modal: function edit_my_modal(ReadinessTypes) {
+      this.editMode = true;
+      console.log(ReadinessTypes);
+      this.form.reset();
+      $("#create_readiness_types").modal('show');
+      this.form.fill(ReadinessTypes);
+    }
+  },
+  mounted: function mounted() {
+    console.log('Component mounted.');
+  },
+  created: function created() {
+    var _this5 = this;
+
+    this.load_readiness_types();
+    Fire.$on("ReadinessTypeCreated", function () {
+      return _this5.load_readiness_types();
+    });
+    Fire.$on("ReadinessTypeDeleted", function () {
+      return _this5.load_readiness_types();
+    });
+    Fire.$on("ReadinessTypesUpdated", function () {
+      return _this5.load_readiness_types();
+    }); // setInterval(() => this.load_Readiness Types(), 10000);
   }
 });
 
@@ -62915,11 +63135,11 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(project.project_ref))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.implementing_office))]),
-                      _vm._v(" "),
                       _c("td", [
                         _vm._v(_vm._s(project.project_country.country_name))
                       ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(project.implementing_office))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(project.project_title))]),
                       _vm._v(" "),
@@ -62939,11 +63159,15 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.disbursement_id))]),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(project.readiness_type.readiness_type_name)
+                        )
+                      ]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.readiness_id))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.readiness_id))]),
+                      _c("td", [
+                        _vm._v(_vm._s(project.project_status.status_name))
+                      ]),
                       _vm._v(" "),
                       _c("td", [
                         _c(
@@ -63627,6 +63851,309 @@ var staticRenderFns = [
       _c("th", [_vm._v("Status")]),
       _vm._v(" "),
       _c("th", [_vm._v("Modify")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-12 mt-2" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("h3", { staticClass: "card-title" }, [
+              _vm._v("Readiness Types")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-tools" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success",
+                  on: { click: _vm.open_my_modal }
+                },
+                [
+                  _vm._v("\n                            Add Readiness Type "),
+                  _c("i", { staticClass: "fa fa-ReadinessTypes-plus fa-fw" })
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body table-responsive no-padding" }, [
+            _c("table", { staticClass: "table table-hover" }, [
+              _c(
+                "tbody",
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _vm._l(_vm.readiness_types, function(readiness_type) {
+                    return _c("tr", { key: readiness_type.id }, [
+                      _c("td", [_vm._v(_vm._s(readiness_type.id))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(readiness_type.readiness_type_name))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.edit_my_modal(readiness_type)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-edit blue" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.delete_readiness_types(
+                                  readiness_type.id
+                                )
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fa fa-trash red" })]
+                        )
+                      ])
+                    ])
+                  })
+                ],
+                2
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade in",
+        attrs: { id: "create_readiness_types", role: "dialog" }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.editMode,
+                        expression: "!editMode"
+                      }
+                    ],
+                    staticClass: "modal-title"
+                  },
+                  [_vm._v("Add New")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editMode,
+                        expression: "editMode"
+                      }
+                    ],
+                    staticClass: "modal-title"
+                  },
+                  [_vm._v("Update Readiness Types's Information")]
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.editMode
+                        ? _vm.update_readiness_types()
+                        : _vm.create_readiness_types()
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.readiness_type_name,
+                              expression: "form.readiness_type_name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has(
+                              "readiness_type_name"
+                            )
+                          },
+                          attrs: {
+                            type: "text",
+                            name: "readiness_type_name",
+                            placeholder: "Readiness Type Name ( eg NAP)"
+                          },
+                          domProps: { value: _vm.form.readiness_type_name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "readiness_type_name",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: {
+                            form: _vm.form,
+                            field: "readiness_type_name"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger pull-left",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close\n                        ")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.editMode,
+                            expression: "!editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { disabled: _vm.form.busy, type: "submit" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Create\n                        "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.editMode,
+                            expression: "editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { disabled: _vm.form.busy, type: "submit" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Update\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("ID")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Readiness Name")])
     ])
   },
   function() {
@@ -81136,6 +81663,9 @@ var routes = [{
 }, {
   path: '/country',
   component: __webpack_require__(/*! ./components/Country.vue */ "./resources/js/components/Country.vue").default
+}, {
+  path: '/readiness_type',
+  component: __webpack_require__(/*! ./components/ReadinessType.vue */ "./resources/js/components/ReadinessType.vue").default
 }];
 window.Fire = new Vue();
 /**
@@ -81526,6 +82056,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_template_id_533b60e5___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Projects_vue_vue_type_template_id_533b60e5___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ReadinessType.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/ReadinessType.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReadinessType.vue?vue&type=template&id=35353a69& */ "./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69&");
+/* harmony import */ var _ReadinessType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ReadinessType.vue?vue&type=script&lang=js& */ "./resources/js/components/ReadinessType.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ReadinessType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ReadinessType.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ReadinessType.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/ReadinessType.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReadinessType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ReadinessType.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ReadinessType.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReadinessType_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69& ***!
+  \**********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ReadinessType.vue?vue&type=template&id=35353a69& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ReadinessType.vue?vue&type=template&id=35353a69&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReadinessType_vue_vue_type_template_id_35353a69___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

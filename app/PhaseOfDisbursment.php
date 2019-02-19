@@ -20,7 +20,7 @@ class PhaseOfDisbursment extends Model
 
     public function disburse_name()
     {
-        return $this->hasOne('App\Disbursment', 'tbl_disbursments.id', 'tbl_phase_of_disbursments.id');
+        return $this->hasMany('App\Disbursment', 'tbl_disbursments.id', 'tbl_phase_of_disbursments.id');
     }
 
 }

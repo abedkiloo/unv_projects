@@ -49,6 +49,7 @@ let routes = [
     {path: '/projects', component: require('./components/Projects.vue').default},
     {path: '/status', component: require('./components/Status.vue').default},
     {path: '/country', component: require('./components/Country.vue').default},
+    {path: '/readiness_type', component: require('./components/ReadinessType.vue').default},
 ]
 
 

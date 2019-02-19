@@ -37,4 +37,14 @@ class Projects extends Model
     {
         return $this->hasOne('App\Disbursment', 'id', 'disbursement_id');
     }
+
+    public function readiness_type()
+    {
+        return $this->hasOne('App\ReadinessType', 'id', 'readiness_id');
+    }
+
+    public function project_status()
+    {
+        return $this->hasOne('App\Status', 'id', 'status_id');
+    }
 }

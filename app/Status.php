@@ -17,4 +17,10 @@ class Status extends Model
         'status_name', 'id'
     ];
 
+
+
+    public function status_projects()
+    {
+        return $this->hasMany('App\Projects', 'status_id', 'id');
+    }
 }

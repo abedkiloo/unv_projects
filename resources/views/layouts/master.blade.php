@@ -117,6 +117,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 Status
                             </p>
                         </router-link>
+                    </li> <li class="nav-item">
+                        <router-link to="/readiness_type" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Readiness Types
+                            </p>
+                        </router-link>
                     </li>
                     <li class="nav-item">
 

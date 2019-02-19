@@ -39,8 +39,8 @@
 
                                 <td>{{project.id}}</td>
                                 <td>{{project.project_ref}}</td>
-                                <td>{{project.implementing_office}}</td>
                                 <td>{{project.project_country.country_name}}</td>
+                                <td>{{project.implementing_office}}</td>
                                 <td>{{project.project_title}}</td>
                                 <td>{{project.amount }}</td>
                                 <td>{{project.date_of_gcf }}</td>
@@ -48,9 +48,8 @@
                                 <td>{{project.start_date }}</td>
                                 <td>{{project.end_date }}</td>
                                 <td>{{project.readiness_or_nap | ready_nap}}</td>
-                                <td>{{project.disbursement_id}}</td>
-                                <td>{{project.readiness_id }}</td>
-                                <td>{{project.readiness_id }}</td>
+                                <td>{{project.readiness_type.readiness_type_name}}</td>
+                                <td>{{project.project_status.status_name }}</td>
                                 <td>
                                     <button @click="edit_my_modal(project)">
                                         <i class="fa fa-edit blue"></i>
@@ -190,6 +189,7 @@
             return {
                 editMode: false,
                 projects: {},
+                readiness_types: {},
                 countries: {},
                 form: new Form({
                     id: '',
@@ -304,6 +304,8 @@
             },
             load_countries() {
                 axios.get('api/country').then(({data}) => (this.countries = data.data));
+            } , load_readiness_type() {
+                axios.get('api/readiness_type').then(({data}) => (this.readiness_types = data.data));
             }
             ,
             open_my_modal() {

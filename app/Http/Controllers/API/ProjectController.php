@@ -15,7 +15,12 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return Projects::latest()->with(['project_country'])->paginate(5);
+        return Projects::latest()->with([
+            'project_country',
+            'project_disbursement',
+            'readiness_type',
+            'project_status'
+        ])->paginate(5);
 
     }
 

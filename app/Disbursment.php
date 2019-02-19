@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-    class Disbursment extends Model
+class Disbursment extends Model
 {
     protected $table = 'tbl_disbursments';
 
@@ -22,12 +22,12 @@ use Illuminate\Database\Eloquent\Model;
 
     public function phase_id()
     {
-        return $this->hasOne('App\PhaseOfDisbursment', 'id', 'id');
+        return $this->hasMany('App\PhaseOfDisbursment', 'id', 'id');
     }
 
     public function projects()
     {
-        return $this->hasOne('App\Projects', 'id', 'project_id');
+        return $this->hasMany('App\Projects', 'id', 'project_id');
     }
 
 }
