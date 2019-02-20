@@ -85,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </router-link>
                     </li>   <li class="nav-item">
                         <router-link to="/phases" class="nav-link">
-                            <i class="nav-icon fas fa-periscope orange"></i>
+                            <i class="nav-icon fas fa-warehouse"></i>
                             <p>
                                 Phases
                                 <!--<span class="right badge badge-danger">New</span>-->
@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                     <li class="nav-item">
                         <router-link to="/disbursment" class="nav-link">
-                            <i class="nav-icon fas fa-cog green"></i>
+                            <i class="nav-icon fas fa-whmcs"></i>
                             <p>
                                 Disbursements
                             </p>
@@ -102,7 +102,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                     <li class="nav-item">
                         <router-link to="/country" class="nav-link">
-                            <i class="nav-icon fas fa-user"></i>
+                            <i class="nav-icon fas fa-algolia"></i>
                             <p>
                                 Country
                             </p>
@@ -112,14 +112,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                     <li class="nav-item">
                         <router-link to="/status" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-star-and-crescent"></i>
                             <p>
                                 Status
                             </p>
                         </router-link>
                     </li> <li class="nav-item">
                         <router-link to="/readiness_type" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-periscope"></i>
                             <p>
                                 Readiness Types
                             </p>

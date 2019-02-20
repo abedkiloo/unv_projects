@@ -2901,6 +2901,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2913,8 +2915,16 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    update_readiness_types: function update_readiness_types() {
+    getResults: function getResults() {
       var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('api/readiness_type?page=' + page).then(function (response) {
+        _this.readiness_types = response.data;
+      });
+    },
+    update_readiness_types: function update_readiness_types() {
+      var _this2 = this;
 
       this.$Progress.start();
       this.form.put('api/readiness_type/' + this.form.id).then(function () {
@@ -2922,13 +2932,13 @@ __webpack_require__.r(__webpack_exports__);
         $('#create_readiness_types').modal('hide');
         swal.fire('Updated', 'Readiness Types Updated successfully', 'success');
 
-        _this.$Progress.finish();
+        _this2.$Progress.finish();
       }).catch(function () {
-        _this.$Progress.fail();
+        _this2.$Progress.fail();
       });
     },
     delete_readiness_types: function delete_readiness_types(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       swal.fire({
         title: 'Are you sure?',
@@ -2940,23 +2950,23 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _this2.$Progress.start();
+          _this3.$Progress.start();
 
-          _this2.form.delete('api/readiness_type/' + id).then(function () {
+          _this3.form.delete('api/readiness_type/' + id).then(function () {
             swal.fire('Deleted!', 'The Readiness Type has been deleted.', 'success');
             Fire.$emit("PhaseDeleted");
 
-            _this2.$Progress.finish();
+            _this3.$Progress.finish();
           }).catch(function () {
             swal.fire('Opps', 'Something Went Wrong :)', 'error');
 
-            _this2.$Progress.fail();
+            _this3.$Progress.fail();
           });
         }
       });
     },
     create_readiness_types: function create_readiness_types() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$Progress.start();
       this.form.post('api/readiness_type').then(function () {
@@ -2967,17 +2977,17 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Readiness Type Created successfully'
         });
 
-        _this3.$Progress.finish();
+        _this4.$Progress.finish();
       }).catch(function () {
-        _this3.$Progress.fail();
+        _this4.$Progress.fail();
       });
     },
     load_readiness_types: function load_readiness_types() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('api/readiness_type').then(function (_ref) {
         var data = _ref.data;
-        return _this4.readiness_types = data.data;
+        return _this5.readiness_types = data;
       });
     },
     open_my_modal: function open_my_modal() {
@@ -2997,17 +3007,17 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    var _this5 = this;
+    var _this6 = this;
 
     this.load_readiness_types();
     Fire.$on("ReadinessTypeCreated", function () {
-      return _this5.load_readiness_types();
+      return _this6.load_readiness_types();
     });
     Fire.$on("ReadinessTypeDeleted", function () {
-      return _this5.load_readiness_types();
+      return _this6.load_readiness_types();
     });
     Fire.$on("ReadinessTypesUpdated", function () {
-      return _this5.load_readiness_types();
+      return _this6.load_readiness_types();
     }); // setInterval(() => this.load_Readiness Types(), 10000);
   }
 });
@@ -63923,7 +63933,7 @@ var render = function() {
                 [
                   _vm._m(0),
                   _vm._v(" "),
-                  _vm._l(_vm.readiness_types, function(readiness_type) {
+                  _vm._l(_vm.readiness_types.data, function(readiness_type) {
                     return _c("tr", { key: readiness_type.id }, [
                       _c("td", [_vm._v(_vm._s(readiness_type.id))]),
                       _vm._v(" "),
@@ -63959,6 +63969,11 @@ var render = function() {
                         )
                       ])
                     ])
+                  }),
+                  _vm._v(" "),
+                  _c("pagination", {
+                    attrs: { data: _vm.projects },
+                    on: { "pagination-change-page": _vm.getResults }
                   })
                 ],
                 2

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DisbursmentSeeder extends Seeder
+class StatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,6 @@ class DisbursmentSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Disbursment::class, 15)->create();
-
+        factory(App\Status::class, 2)->create();
     }
 }

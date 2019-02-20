@@ -11,6 +11,7 @@ class ReadinessSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\ReadinessType::class, 5)->create();
+
     }
 }

@@ -22,7 +22,7 @@
                                 <th>ID</th>
                                 <th>Readiness Name</th>
                             </tr>
-                            <tr v-for="readiness_type in readiness_types" :key="readiness_type.id">
+                            <tr v-for="readiness_type in readiness_types.data" :key="readiness_type.id">
 
                                 <td>{{readiness_type.id}}</td>
                                 <td>{{readiness_type.readiness_type_name}}</td>
@@ -36,6 +36,8 @@
                                 </td>
 
                             </tr>
+                            <pagination :data="projects" @pagination-change-page="getResults"></pagination>
+
 
                             </tbody>
                         </table>
@@ -101,6 +103,12 @@
             }
         },
         methods: {
+            getResults(page = 1) {
+                axios.get('api/readiness_type?page=' + page)
+                    .then(response => {
+                        this.readiness_types = response.data;
+                    });
+            },
             update_readiness_types() {
                 this.$Progress.start();
 
@@ -185,7 +193,7 @@
             }
             ,
             load_readiness_types() {
-                axios.get('api/readiness_type').then(({data}) => (this.readiness_types = data.data));
+                axios.get('api/readiness_type').then(({data}) => (this.readiness_types = data));
             }
             ,
             open_my_modal() {

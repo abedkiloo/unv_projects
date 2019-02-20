@@ -11,6 +11,7 @@ class PhaseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        factory(App\PhaseOfDisbursment::class, 5)->create();
+
     }
 }
