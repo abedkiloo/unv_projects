@@ -27,4 +27,5 @@ Route::apiResources(['status' => 'API\StatusController']);
 Route::apiResources(['readiness_type' => 'API\ReadinessTypeController']);
 Route::get('profile', 'API\UserController@profile');
 Route::get('projects/all', 'API\ProjectController@all');
-Route::get('projects/country/{country_id} ', 'API\ProjectController@all');
+Route::get('projects/country/{country_id} ', 'API\ProjectController@country_project');
+Route::get('projects/projects/status/completed', 'API\ProjectController@project_complete');

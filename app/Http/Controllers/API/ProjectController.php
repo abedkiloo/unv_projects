@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Country;
 use App\Http\Controllers\Controller;
 use App\Projects;
+use App\Status;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -27,12 +29,27 @@ class ProjectController extends Controller
     public function all()
     {
         return Projects::latest()->get();
+    }
+
+    public function country_project($id)
+    {
+        $c_id = Country::where('country_name', 'like', "%" . $id . "%")->select('id')->first()['id'];
+        return Projects::where('country_id', $c_id)->get();
 
     }
 
-    public function country_ptoject()
+    public function project_complete()
     {
-        return Projects::latest()->get();
+        $status_id = Status::where('status_name', 'like', "%complet%")->first()['id'];
+        return Projects::
+        where('status_id', $status_id)
+            ->with([
+                'project_country',
+                'project_disbursement',
+                'readiness_type',
+                'project_status'
+            ])
+            ->get();
 
     }
 
