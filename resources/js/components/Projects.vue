@@ -1,3 +1,4 @@
+
 <template>
     <div class="container">
         <div class="row">
@@ -12,7 +13,7 @@
                                 <!--data-toggle="modal" data-target="#create_project">-->
 
                                 Add Project <i
-                                class="fa fa-user-plus fa-fw"></i></button>
+                                class="fa fa-plus-square-o fa-fw"></i></button>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -48,7 +49,6 @@
                                 <td>{{project.start_date }}</td>
                                 <td>{{project.end_date }}</td>
                                 <td>{{project.readiness_or_nap | ready_nap}}</td>
-                                <td>{{project.readiness_type.readiness_type_name}}</td>
                                 <td>{{project.project_status.status_name }}</td>
                                 <td>
                                     <button @click="edit_my_modal(project)">
@@ -60,7 +60,6 @@
                                 </td>
 
                             </tr>
-                            <pagination :data="projects" @pagination-change-page="getResults"></pagination>
 
 
                             </tbody>
@@ -68,6 +67,8 @@
                     </div>
                     <!-- /.card-body -->
                 </div>
+                <pagination :data="projects" @pagination-change-page="getResults"></pagination>
+
                 <!-- /.card -->
             </div>
         </div>
@@ -79,7 +80,7 @@
                     <div class="modal-body">
                         <!-- form start -->
                         <h5 v-show="!editMode" class="modal-title">Add New</h5>
-                        <h5 v-show="editMode" class="modal-title">Update User's Information</h5>
+                        <h5 v-show="editMode" class="modal-title">Update Projects's Information</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -104,7 +105,8 @@
                                 <select name="type" v-model="form.country_id" id="type" class="form-control"
                                         :class="{ 'is-invalid': form.errors.has('country_id') }">
                                     <option value="">Select Country</option>
-                                    <option v-for="country in countries" :value="country.id">{{country.country_name}}</option>
+                                    <option v-for="country in countries" :value="country.id">{{country.country_name}}
+                                    </option>
 
                                 </select>
                                 <has-error :form="form" field="country_id"></has-error>
@@ -113,7 +115,8 @@
                             <div class="form-group">
                                 <input v-model="form.implementing_office" type="text" name="implementing_office"
                                        placeholder="Implemeting Office"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('implementing_office') }">
+                                       class="form-control"
+                                       :class="{ 'is-invalid': form.errors.has('implementing_office') }">
                                 <has-error :form="form" field="implementing_office"></has-error>
                             </div>
 
@@ -152,13 +155,49 @@
                             </div>
 
                             <div class="form-group">
-                                <select name="readiness_or_nap" v-model="form.readiness_or_nap" id="readiness_or_nap" class="form-control"
-                                        :class="{ 'is-invalid': form.errors.has('readiness_or_nap') }">
-                                    <option value="">Select Readiness or NAP</option>
-                                    <option value="1">Readiness</option>
-                                    <option value="2">NAP</option>
-                                </select>
-                                <has-error :form="form" field="readiness_or_nap"></has-error>
+
+                                <div class="row">
+                                    <label class="col-3" for="status_id">Status</label>
+                                    <select name="status_id" v-model="form.readiness_id"
+                                            id="status_id"
+                                            class="form-control  col-7"
+                                            :class="{ 'is-invalid': form.errors.has('status_id') }">
+
+                                        <option value="">Select Status</option>
+                                        <option v-for="state in status" :value="state.id">{{state.status_name}}</option>
+                                    </select>
+                                    <has-error :form="form" field="status_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <label class="col-3" for="readiness_id">Readiness Type</label>
+                                    <select name="readiness_id" v-model="form.readiness_id"
+                                            id="readiness_id"
+                                            class="form-control  col-7"
+                                            :class="{ 'is-invalid': form.errors.has('readiness_or_nap') }">
+
+                                        <option value="">Select Readiness Type</option>
+                                        <option v-for="ready_type in readiness_types" :value="ready_type.id">{{ready_type.readiness_type_name}}</option>
+                                    </select>
+                                    <has-error :form="form" field="readiness_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-3" for="readiness_or_nap">Readiness Or NAP</label>
+
+                                    <select name="readiness_or_nap" v-model="form.readiness_or_nap" id="readiness_or_nap"
+                                            class="form-control col-7"
+                                            :class="{ 'is-invalid': form.errors.has('readiness_or_nap') }">
+
+                                        <option value="">Select Readiness or NAP</option>
+                                        <option value="1">Readiness</option>
+                                        <option value="2">NAP</option>
+                                    </select>
+                                    <has-error :form="form" field="readiness_or_nap"></has-error>
+                                </div>
                             </div>
 
                         </div>
@@ -189,6 +228,7 @@
             return {
                 editMode: false,
                 projects: {},
+                status: {},
                 readiness_types: {},
                 countries: {},
                 form: new Form({
@@ -204,7 +244,7 @@
                     end_date: '',
                     disbursement_id: '',
                     readiness_id: '',
-                    readiness_of_nap: '',
+                    readiness_or_nap: '',
                     status_id: ''
                 })
             }
@@ -225,7 +265,7 @@
                         $('#create_project').modal('hide');
                         swal.fire(
                             'Updated',
-                            'User Updated successfully',
+                            'Project Updated successfully',
                             'success',
                         )
                         this.$Progress.finish();
@@ -253,7 +293,7 @@
 
                                 swal.fire(
                                     'Deleted!',
-                                    'The User has been deleted.',
+                                    'The Project has been deleted.',
                                     'success'
                                 )
                                 Fire.$emit("ProjectDeleted");
@@ -288,7 +328,7 @@
 
                         toast.fire({
                             type: 'success',
-                            title: 'User Created successfully'
+                            title: 'Project Created successfully'
                         })
                         this.$Progress.finish()
                     })
@@ -301,10 +341,12 @@
             ,
             load_projects() {
                 axios.get('api/project').then(({data}) => (this.projects = data));
+            },load_status() {
+                axios.get('api/status').then(({data}) => (this.status = data.data));
             },
             load_countries() {
                 axios.get('api/country').then(({data}) => (this.countries = data.data));
-            } , load_readiness_type() {
+            }, load_readiness_type() {
                 axios.get('api/readiness_type').then(({data}) => (this.readiness_types = data.data));
             }
             ,
@@ -312,12 +354,11 @@
                 this.editMode = false;
                 this.form.reset();
                 $("#create_project").modal('show');
-            }, edit_my_modal(user) {
+            }, edit_my_modal(project) {
                 this.editMode = true;
-                console.log(user)
                 this.form.reset();
                 $("#create_project").modal('show');
-                this.form.fill(user)
+                this.form.fill(project)
             }
         },
         mounted() {
@@ -325,6 +366,8 @@
         }
         ,
         created() {
+            this.load_readiness_type();
+            this.load_status();
             this.load_projects();
             this.load_countries();
             Fire.$on("ProjectCreated", () => this.load_projects());

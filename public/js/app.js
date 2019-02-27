@@ -2650,11 +2650,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       editMode: false,
       projects: {},
+      status: {},
       readiness_types: {},
       countries: {},
       form: new Form({
@@ -2670,7 +2710,7 @@ __webpack_require__.r(__webpack_exports__);
         end_date: '',
         disbursement_id: '',
         readiness_id: '',
-        readiness_of_nap: '',
+        readiness_or_nap: '',
         status_id: ''
       })
     };
@@ -2691,7 +2731,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.put('api/project/' + this.form.id).then(function () {
         Fire.$emit('ProjectUpdated');
         $('#create_project').modal('hide');
-        swal.fire('Updated', 'User Updated successfully', 'success');
+        swal.fire('Updated', 'Project Updated successfully', 'success');
 
         _this2.$Progress.finish();
       }).catch(function () {
@@ -2714,7 +2754,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.$Progress.start();
 
           _this3.form.delete('api/project/' + id).then(function () {
-            swal.fire('Deleted!', 'The User has been deleted.', 'success');
+            swal.fire('Deleted!', 'The Project has been deleted.', 'success');
             Fire.$emit("ProjectDeleted");
 
             _this3.$Progress.finish();
@@ -2735,7 +2775,7 @@ __webpack_require__.r(__webpack_exports__);
         $('#create_project').modal('hide');
         toast.fire({
           type: 'success',
-          title: 'User Created successfully'
+          title: 'Project Created successfully'
         });
 
         _this4.$Progress.finish();
@@ -2751,20 +2791,28 @@ __webpack_require__.r(__webpack_exports__);
         return _this5.projects = data;
       });
     },
-    load_countries: function load_countries() {
+    load_status: function load_status() {
       var _this6 = this;
 
-      axios.get('api/country').then(function (_ref2) {
+      axios.get('api/status').then(function (_ref2) {
         var data = _ref2.data;
-        return _this6.countries = data.data;
+        return _this6.status = data.data;
+      });
+    },
+    load_countries: function load_countries() {
+      var _this7 = this;
+
+      axios.get('api/country').then(function (_ref3) {
+        var data = _ref3.data;
+        return _this7.countries = data.data;
       });
     },
     load_readiness_type: function load_readiness_type() {
-      var _this7 = this;
+      var _this8 = this;
 
-      axios.get('api/readiness_type').then(function (_ref3) {
-        var data = _ref3.data;
-        return _this7.readiness_types = data.data;
+      axios.get('api/readiness_type').then(function (_ref4) {
+        var data = _ref4.data;
+        return _this8.readiness_types = data.data;
       });
     },
     open_my_modal: function open_my_modal() {
@@ -2772,30 +2820,31 @@ __webpack_require__.r(__webpack_exports__);
       this.form.reset();
       $("#create_project").modal('show');
     },
-    edit_my_modal: function edit_my_modal(user) {
+    edit_my_modal: function edit_my_modal(project) {
       this.editMode = true;
-      console.log(user);
       this.form.reset();
       $("#create_project").modal('show');
-      this.form.fill(user);
+      this.form.fill(project);
     }
   },
   mounted: function mounted() {
     console.log('Component mounted.');
   },
   created: function created() {
-    var _this8 = this;
+    var _this9 = this;
 
+    this.load_readiness_type();
+    this.load_status();
     this.load_projects();
     this.load_countries();
     Fire.$on("ProjectCreated", function () {
-      return _this8.load_projects();
+      return _this9.load_projects();
     });
     Fire.$on("ProjectDeleted", function () {
-      return _this8.load_projects();
+      return _this9.load_projects();
     });
     Fire.$on("ProjectUpdated", function () {
-      return _this8.load_projects();
+      return _this9.load_projects();
     }); // setInterval(() => this.load_projects(), 10000);
   }
 });
@@ -63112,112 +63161,121 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-12 mt-2" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h3", { staticClass: "card-title" }, [_vm._v("Projects Table")]),
+      _c(
+        "div",
+        { staticClass: "col-sm-12 mt-2" },
+        [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c("h3", { staticClass: "card-title" }, [
+                _vm._v("Projects Table")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-tools" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    on: { click: _vm.open_my_modal }
+                  },
+                  [
+                    _vm._v("\n\n                            Add Project "),
+                    _c("i", { staticClass: "fa fa-plus-square-o fa-fw" })
+                  ]
+                )
+              ])
+            ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  on: { click: _vm.open_my_modal }
-                },
-                [
-                  _vm._v("\n\n                            Add Project "),
-                  _c("i", { staticClass: "fa fa-user-plus fa-fw" })
-                ]
-              )
-            ])
+            _c(
+              "div",
+              { staticClass: "card-body table-responsive no-padding" },
+              [
+                _c("table", { staticClass: "table table-hover" }, [
+                  _c(
+                    "tbody",
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _vm._l(_vm.projects.data, function(project) {
+                        return _c("tr", { key: project.id }, [
+                          _c("td", [_vm._v(_vm._s(project.id))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.project_ref))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(project.project_country.country_name))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(project.implementing_office))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.project_title))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.amount))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.date_of_gcf))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.duration))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.start_date))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(project.end_date))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("ready_nap")(project.readiness_or_nap)
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(project.project_status.status_name))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.edit_my_modal(project)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-edit blue" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.delete_project(project.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fa fa-trash red" })]
+                            )
+                          ])
+                        ])
+                      })
+                    ],
+                    2
+                  )
+                ])
+              ]
+            )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body table-responsive no-padding" }, [
-            _c("table", { staticClass: "table table-hover" }, [
-              _c(
-                "tbody",
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _vm._l(_vm.projects.data, function(project) {
-                    return _c("tr", { key: project.id }, [
-                      _c("td", [_vm._v(_vm._s(project.id))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.project_ref))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(project.project_country.country_name))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.implementing_office))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.project_title))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.amount))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.date_of_gcf))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.duration))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.start_date))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(project.end_date))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(_vm._f("ready_nap")(project.readiness_or_nap))
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(project.readiness_type.readiness_type_name)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(project.project_status.status_name))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.edit_my_modal(project)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-edit blue" })]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            on: {
-                              click: function($event) {
-                                return _vm.delete_project(project.id)
-                              }
-                            }
-                          },
-                          [_c("i", { staticClass: "fa fa-trash red" })]
-                        )
-                      ])
-                    ])
-                  }),
-                  _vm._v(" "),
-                  _c("pagination", {
-                    attrs: { data: _vm.projects },
-                    on: { "pagination-change-page": _vm.getResults }
-                  })
-                ],
-                2
-              )
-            ])
-          ])
-        ])
-      ])
+          _c("pagination", {
+            attrs: { data: _vm.projects },
+            on: { "pagination-change-page": _vm.getResults }
+          })
+        ],
+        1
+      )
     ]),
     _vm._v(" "),
     _c(
@@ -63265,7 +63323,7 @@ var render = function() {
                     ],
                     staticClass: "modal-title"
                   },
-                  [_vm._v("Update User's Information")]
+                  [_vm._v("Update Projects's Information")]
                 ),
                 _vm._v(" "),
                 _vm._m(1)
@@ -63420,7 +63478,12 @@ var render = function() {
                               return _c(
                                 "option",
                                 { domProps: { value: country.id } },
-                                [_vm._v(_vm._s(country.country_name))]
+                                [
+                                  _vm._v(
+                                    _vm._s(country.country_name) +
+                                      "\n                                "
+                                  )
+                                ]
                               )
                             })
                           ],
@@ -63699,72 +63762,243 @@ var render = function() {
                       1
                     ),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group" },
-                      [
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.form.readiness_or_nap,
-                                expression: "form.readiness_or_nap"
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "div",
+                        { staticClass: "row" },
+                        [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "col-3",
+                              attrs: { for: "status_id" }
+                            },
+                            [_vm._v("Status")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.readiness_id,
+                                  expression: "form.readiness_id"
+                                }
+                              ],
+                              staticClass: "form-control  col-7",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("status_id")
+                              },
+                              attrs: { name: "status_id", id: "status_id" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "readiness_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
                               }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              "is-invalid": _vm.form.errors.has(
-                                "readiness_or_nap"
-                              )
                             },
-                            attrs: {
-                              name: "readiness_or_nap",
-                              id: "readiness_or_nap"
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.form,
-                                  "readiness_or_nap",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("Select Status")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.status, function(state) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: state.id } },
+                                  [_vm._v(_vm._s(state.status_name))]
                                 )
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "status_id" }
+                          })
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "div",
+                        { staticClass: "row" },
+                        [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "col-3",
+                              attrs: { for: "readiness_id" }
+                            },
+                            [_vm._v("Readiness Type")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.readiness_id,
+                                  expression: "form.readiness_id"
+                                }
+                              ],
+                              staticClass: "form-control  col-7",
+                              class: {
+                                "is-invalid": _vm.form.errors.has(
+                                  "readiness_or_nap"
+                                )
+                              },
+                              attrs: {
+                                name: "readiness_id",
+                                id: "readiness_id"
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "readiness_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
                               }
-                            }
-                          },
-                          [
-                            _c("option", { attrs: { value: "" } }, [
-                              _vm._v("Select Readiness or NAP")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "1" } }, [
-                              _vm._v("Readiness")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "2" } }, [
-                              _vm._v("NAP")
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("has-error", {
-                          attrs: { form: _vm.form, field: "readiness_or_nap" }
-                        })
-                      ],
-                      1
-                    )
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("Select Readiness Type")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(_vm.readiness_types, function(ready_type) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: ready_type.id } },
+                                  [
+                                    _vm._v(
+                                      _vm._s(ready_type.readiness_type_name)
+                                    )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "readiness_id" }
+                          })
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "div",
+                        { staticClass: "row" },
+                        [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "col-3",
+                              attrs: { for: "readiness_or_nap" }
+                            },
+                            [_vm._v("Readiness Or NAP")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.readiness_or_nap,
+                                  expression: "form.readiness_or_nap"
+                                }
+                              ],
+                              staticClass: "form-control col-7",
+                              class: {
+                                "is-invalid": _vm.form.errors.has(
+                                  "readiness_or_nap"
+                                )
+                              },
+                              attrs: {
+                                name: "readiness_or_nap",
+                                id: "readiness_or_nap"
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "readiness_or_nap",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "" } }, [
+                                _vm._v("Select Readiness or NAP")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "1" } }, [
+                                _vm._v("Readiness")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "2" } }, [
+                                _vm._v("NAP")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "readiness_or_nap" }
+                          })
+                        ],
+                        1
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-footer" }, [

@@ -62,19 +62,21 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'project_ref' => 'required|string',
-            'project_title' => 'required|string|max:191',
-            'date_of_gcf' => 'required|string|max:191',
-            'start_date' => 'required|string',
-            'duration' => 'required|string|max:191',
-            'end_date' => 'required|string|max:191',
-            'country_id' => 'required|integer',
-            'implementing_office' => 'required|string',
-//            'readiness_id' => 'required|string|max:191',
-//            'readiness_or_nap' => 'required|string|max:191',
-//            'status_id' => 'required|string|max:191',
-        ]);
+//        $this->validate($request, [
+//            'project_ref' => 'required|string',
+//            'project_title' => 'required|string|max:191',
+//            'date_of_gcf' => 'required|string|max:191',
+//            'start_date' => 'required|string',
+//            'duration' => 'required|string|max:191',
+//            'end_date' => 'required|string|max:191',
+//            'country_id' => 'required|integer',
+//            'implementing_office' => 'required|string',
+////            'readiness_id' => 'required|string|max:191',
+////            'readiness_or_nap' => 'required|string|max:191',
+////            'status_id' => 'required|string|max:191',
+//        ]);
+        return response(['read'=>$request->all()['readiness_id']]);
+
         $new_project = new Projects();
         $new_project->project_ref = $request->all()['project_ref'];
         $new_project->project_title = $request->all()['project_title'];
@@ -82,6 +84,8 @@ class ProjectController extends Controller
         $new_project->implementing_office = $request->all()['implementing_office'];
         $new_project->start_date = $request->all()['start_date'];
         $new_project->duration = $request->all()['duration'];
+        $new_project->amount = $request->all()['amount'];
+        $new_project->country_id = $request->all()['country_id'];
         $new_project->end_date = $request->all()['end_date'];
         $new_project->disbursement_id = 0;
         $new_project->readiness_id = $request->all()['readiness_id'];
@@ -140,6 +144,10 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Projects::findOrFail($id);
+
+        $user->delete();
+
+        return response(['message' => "Project Deleted"]);
     }
 }
